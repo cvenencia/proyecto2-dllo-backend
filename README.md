@@ -8,18 +8,18 @@ Desarrollen el backend para un clon de Twitter + Instagram.
 
 ## Endpoints
 
-- [ ] Endpoint de login con usuario y contraseña
+- [X] Endpoint de login con usuario y contraseña
   - Debe generar un JWT de sesión
   - Metodo: POST
   - Ruta: '/users/login'
   - Body: { username, password }
   - Response: { token }
-- [ ] Endpoint de login con JWT token
+- [X] Endpoint de login con JWT token
   - Metodo: POST
   - Ruta: '/users/login'
   - Body: { token }
   - Response: {}
-- [ ] Endpoint de registro de usuario
+- [X] Endpoint de registro de usuario
   - Debe generar un JWT de sesión
   - Metodo: POST
   - Ruta: '/users/'
