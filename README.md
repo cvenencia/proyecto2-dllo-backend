@@ -124,13 +124,13 @@ Desarrollen el backend para un clon de Twitter + Instagram.
 
 ## Pruebas Unitarias (Jest)
 
-- [ ] Login
-  - [ ] Informacion valida
-  - [ ] Informacion invalida (usuario no existe)
-  - [ ] Informacion invalida (contraseña incorrecta)
-- [ ] Registro
-  - [ ] Informacion completa
-  - [ ] Informacion incompleta
+- [X] Login
+  - [X] Informacion valida
+  - [X] Informacion invalida (usuario no existe)
+  - [X] Informacion invalida (contraseña incorrecta)
+- [X] Registro
+  - [X] Informacion completa
+  - [X] Informacion incompleta
 
 
 - [ ] Informacion de Usuario

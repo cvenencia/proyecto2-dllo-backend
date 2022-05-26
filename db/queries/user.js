@@ -1,4 +1,4 @@
-const mongoose = require("../mongo")
+const mongoose = require("mongoose")
 const userSchema = require("../schemas/user")
 const UserModel = mongoose.model("User", userSchema)
 const jwt = require("jsonwebtoken")
@@ -54,28 +54,30 @@ async function loginWithToken(token) {
 async function loginWithCredentials(data) {
     const {password, username} = data
     const user = await UserModel.findOne({username}).exec()
-    const valid = await bcrypt.compare(password + user.salt + pepper, user.hashed_password)
-    if (valid) {
-        const token = jwt.sign(
-            {
-                user_id: user._id,
-                username: user.username,
-                hashed_password: user.hashed_password,
-                email: user.email,
-                birthdate: user.birthdate,
-                bio: user.bio,
-                salt: user.salt
-            },
-            process.env.TOKEN_KEY,
-            {
-              expiresIn: "2h",
-            }
-        )
-        user.token = token
-        await user.save().catch(err => err)
-        return token
-    } else {
-        return false
+    if (user) {
+        const valid = await bcrypt.compare(password + user.salt + pepper, user.hashed_password)
+        if (valid) {
+            const token = jwt.sign(
+                {
+                    user_id: user._id,
+                    username: user.username,
+                    hashed_password: user.hashed_password,
+                    email: user.email,
+                    birthdate: user.birthdate,
+                    bio: user.bio,
+                    salt: user.salt
+                },
+                process.env.TOKEN_KEY,
+                {
+                  expiresIn: "2h",
+                }
+            )
+            user.token = token
+            await user.save().catch(err => err)
+            return token
+        } else {
+            return false
+        }
     }
 }
 
