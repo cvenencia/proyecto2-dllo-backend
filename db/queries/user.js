@@ -2,11 +2,17 @@ const mongoose = require("../mongo")
 const userSchema = require("../schemas/user")
 const UserModel = mongoose.model("User", userSchema)
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+
+const pepper = process.env.PEPPER
 
 async function registerUser(data) {
     const exists = await userExists(data.username)
     if (!exists) {
-        const newUser = new UserModel(data)
+        const {password, ...newData} = data
+        newData.salt = await bcrypt.genSalt(10)
+        newData.hashed_password = await bcrypt.hash(password + newData.salt + pepper, 10)
+        const newUser = new UserModel(newData)
         const {errors} = await newUser.save().catch(err => err)
         const valid = errors ? false : true
         if (valid) {
@@ -14,10 +20,11 @@ async function registerUser(data) {
                 {
                     user_id: newUser._id,
                     username: newUser.username,
-                    password: newUser.password,
+                    hashed_password: newUser.hashed_password,
                     email: newUser.email,
                     birthdate: newUser.birthdate,
-                    bio: newUser.bio
+                    bio: newUser.bio,
+                    salt: newUser.salt
                 },
                 process.env.TOKEN_KEY,
                 {
@@ -45,16 +52,19 @@ async function loginWithToken(token) {
 }
 
 async function loginWithCredentials(data) {
-    const user = await UserModel.findOne(data).exec()
-    if (user) {
+    const {password, username} = data
+    const user = await UserModel.findOne({username}).exec()
+    const valid = await bcrypt.compare(password + user.salt + pepper, user.hashed_password)
+    if (valid) {
         const token = jwt.sign(
             {
                 user_id: user._id,
                 username: user.username,
-                password: user.password,
+                hashed_password: user.hashed_password,
                 email: user.email,
                 birthdate: user.birthdate,
-                bio: user.bio
+                bio: user.bio,
+                salt: user.salt
             },
             process.env.TOKEN_KEY,
             {

@@ -6,9 +6,13 @@ const userSchema = new Schema({
         type: String,
         required: [true, "Username required."],
     },
-    password: {
+    hashed_password: {
         type: String,
         required: [true, "Password required"]
+    },
+    salt: {
+        type: String,
+        required: [true, "Salt required"]
     },
     email: {
         type: String,
