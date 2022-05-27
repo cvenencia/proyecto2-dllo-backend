@@ -70,9 +70,8 @@ describe("User login and registration", () => {
             email: "test@test.com",
             bio: "xd"
         }
-        var {status, _body: body} = await request(app).post('/users').send(user)
+        var {status} = await request(app).post('/users').send(user)
 
-        console.log(body)
         expect(status).toBe(400)
 
         user = {
@@ -90,7 +89,7 @@ describe("User login and registration", () => {
     describe("Login tests", () => {
 
         // Register user
-        beforeEach(async () => {
+        beforeAll(async () => {
             const user = {
                 username: "logintest",
                 password: "password1234",
