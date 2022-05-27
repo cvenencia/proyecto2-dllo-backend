@@ -8,37 +8,41 @@ const pepper = process.env.PEPPER
 
 async function registerUser(data) {
     const exists = await userExists(data.username)
-    if (!exists) {
-        const {password, ...newData} = data
-        newData.salt = await bcrypt.genSalt(10)
-        newData.hashed_password = await bcrypt.hash(password + newData.salt + pepper, 10)
-        const newUser = new UserModel(newData)
-        const {errors} = await newUser.save().catch(err => err)
-        const valid = errors ? false : true
-        if (valid) {
-            const token = jwt.sign(
-                {
-                    user_id: newUser._id,
-                    username: newUser.username,
-                    hashed_password: newUser.hashed_password,
-                    email: newUser.email,
-                    birthdate: newUser.birthdate,
-                    bio: newUser.bio,
-                    salt: newUser.salt
-                },
-                process.env.TOKEN_KEY,
-                {
-                  expiresIn: "2h",
-                }
-            )
-            newUser.token = token
-            await newUser.save().catch(err => err)
-            return {token}
+    const {password, ...newData} = data
+    if (password) {
+        if (!exists) {
+            newData.salt = await bcrypt.genSalt(10)
+            newData.hashed_password = await bcrypt.hash(password + newData.salt + pepper, 10)
+            const newUser = new UserModel(newData)
+            const {errors} = await newUser.save().catch(err => err)
+            const valid = errors ? false : true
+            if (valid) {
+                const token = jwt.sign(
+                    {
+                        user_id: newUser._id,
+                        username: newUser.username,
+                        hashed_password: newUser.hashed_password,
+                        email: newUser.email,
+                        birthdate: newUser.birthdate,
+                        bio: newUser.bio,
+                        salt: newUser.salt
+                    },
+                    process.env.TOKEN_KEY,
+                    {
+                      expiresIn: "2h",
+                    }
+                )
+                newUser.token = token
+                await newUser.save().catch(err => err)
+                return {token}
+            } else {
+                return 0 // Invalid data for creating user
+            }
         } else {
-            return 0 // Invalid data for creating user
+            return -1 // User already exists
         }
     } else {
-        return -1 // User already exists
+        return 0 // Invalid data for creating user
     }
 }
 

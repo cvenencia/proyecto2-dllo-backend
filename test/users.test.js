@@ -30,14 +30,59 @@ describe("User login and registration", () => {
     })
 
     test("Incomplete registration", async () => {
-        const user = {
-            username: "username4321",
+        let user = {
+            username: "username1",
             password: "password1234",
             birthdate: "2020-04-30",
             email: "test@test.com",
             // Missing bio
         }
-        const {status} = await request(app).post('/users').send(user)
+        var {status} = await request(app).post('/users').send(user)
+
+        expect(status).toBe(400)
+
+        user = {
+            username: "username2",
+            password: "password1234",
+            birthdate: "2020-04-30",
+            // Missing email
+            bio: "xd"
+        }
+        var {status} = await request(app).post('/users').send(user)
+
+        expect(status).toBe(400)
+
+        user = {
+            username: "username3",
+            password: "password1234",
+            // Missing birthdate
+            email: "test@test.com",
+            bio: "xd"
+        }
+        var {status} = await request(app).post('/users').send(user)
+
+        expect(status).toBe(400)
+
+        user = {
+            username: "username4",
+            // Missing password
+            birthdate: "1950-04-30",
+            email: "test@test.com",
+            bio: "xd"
+        }
+        var {status, _body: body} = await request(app).post('/users').send(user)
+
+        console.log(body)
+        expect(status).toBe(400)
+
+        user = {
+            // Missing username
+            password: "password5",
+            birthdate: "1950-04-30",
+            email: "test@test.com",
+            bio: "xd"
+        }
+        var {status} = await request(app).post('/users').send(user)
 
         expect(status).toBe(400)
     })
