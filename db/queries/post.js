@@ -46,4 +46,4 @@ async function getPostById(post_id) {
     }
 }
 
-module.exports = {createPost, getPostInformation}
+module.exports = {createPost, getPostInformation, getPostById}

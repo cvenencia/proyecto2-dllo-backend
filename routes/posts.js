@@ -14,6 +14,9 @@ router.use(( req, res, next ) => {
 })
 
 const {createPost, getPostInformation} = require("../db/queries/post")
+const {likePost} = require("../db/queries/post_like")
+const {commentPost} = require("../db/queries/post_comment")
+const {savePost} = require("../db/queries/post_save")
 
 router.post("/", async (req, res) => {
     if (req.body.token) {
@@ -39,5 +42,44 @@ router.get("/", async (req, res) => {
         }
     } else {
         res.status(403).json({message: "Missing post ID."})
+    }
+})
+
+router.post("/like", async (req, res) => {
+    if (req.body.post_id && req.body.token) {
+        const valid = await likePost(req.body)
+        if (valid) {
+            res.status(201).json({})
+        } else {
+            res.status(400).json({message: "Invalid form."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
+
+router.post("/save", async (req, res) => {
+    if (req.body.post_id && req.body.token) {
+        const valid = await savePost(req.body)
+        if (valid) {
+            res.status(201).json({})
+        } else {
+            res.status(400).json({message: "Invalid form."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
+
+router.post("/comment", async (req, res) => {
+    if (req.body.post_id && req.body.token && req.body.comment) {
+        const valid = await commentPost(req.body)
+        if (valid) {
+            res.status(201).json({})
+        } else {
+            res.status(400).json({message: "Invalid form."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
     }
 })

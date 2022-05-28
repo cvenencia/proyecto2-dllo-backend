@@ -105,17 +105,17 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Response: { img_url, bio, author, likes, comments }
 
 
-- [ ] Endpoint de dar me gusta a una publicación
+- [X] Endpoint de dar me gusta a una publicación
   - Metodo: POST
   - Ruta: '/posts/like'
   - Body: { post_id }
   - Response: {  }
-- [ ] Endpoint de guardar una publicación
+- [X] Endpoint de guardar una publicación
   - Metodo: POST
   - Ruta: '/posts/save'
   - Body: { post_id }
   - Response: {  }
-- [ ] Endpoint de comentar en una publicación
+- [X] Endpoint de comentar en una publicación
   - Metodo: POST
   - Ruta: '/posts/'
   - Body: { post_id, comment }
