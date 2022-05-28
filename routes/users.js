@@ -45,5 +45,7 @@ router.post("/login", async (req, res) => {
         } else {
             res.status(401).json({message: "Invalid credentials."})
         }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
     }
 })
