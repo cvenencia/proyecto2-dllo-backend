@@ -13,7 +13,7 @@ router.use(( req, res, next ) => {
     next();
 })
 
-const {createPost} = require("../db/queries/post")
+const {createPost, getPostInformation} = require("../db/queries/post")
 
 router.post("/", async (req, res) => {
     if (req.body.token) {
@@ -26,5 +26,18 @@ router.post("/", async (req, res) => {
         }
     } else {
         res.status(403).json({message: "Missing user token."})
+    }
+})
+
+router.get("/", async (req, res) => {
+    if (req.body.post_id) {
+        const post = await getPostInformation(req.body.post_id)
+        if (post) {
+            res.status(200).json(post)
+        } else {
+            res.status(400).json({message: "Invalid post ID."})
+        }
+    } else {
+        res.status(403).json({message: "Missing post ID."})
     }
 })
