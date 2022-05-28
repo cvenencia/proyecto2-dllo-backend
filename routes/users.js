@@ -12,3 +12,40 @@ router.use(( req, res, next ) => {
     }
     next();
 })
+
+const {registerUser, loginWithToken, loginWithCredentials} = require("../db/queries/user")
+
+router.post("/", async (req, res) => {
+    const response = await registerUser(req.body)
+    if (typeof(response) != "number"){
+        res.status(201).json(response)
+    } else if (response == 0){
+        res.status(400).json({
+            message: "Invalid form."
+        })
+    } else {
+        res.status(409).json({
+            message: "User already exists."
+        })
+    }
+})
+
+router.post("/login", async (req, res) => {
+    if (req.body.token) {
+        if (await loginWithToken(req.body.token)){
+            res.status(200).json({})
+        } else {
+            res.status(401).json({message: "Invalid token."})
+        }
+    } else if (req.body.username && req.body.password) {
+        const response = await loginWithCredentials({username: req.body.username, password: req.body.password})
+        if (response) {
+            const token = response
+            res.status(200).json({token})
+        } else {
+            res.status(401).json({message: "Invalid credentials."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
