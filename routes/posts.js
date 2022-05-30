@@ -13,7 +13,13 @@ router.use(( req, res, next ) => {
     next();
 })
 
-const {createPost, getPostInformation, getUserPosts, getPostsUserLiked} = require("../db/queries/post")
+const {
+    createPost,
+    getPostInformation,
+    getUserPosts,
+    getPostsUserLiked,
+    getPostsSavedByUser
+} = require("../db/queries/post")
 const {likePost} = require("../db/queries/post_like")
 const {commentPost} = require("../db/queries/post_comment")
 const {savePost} = require("../db/queries/post_save")
@@ -58,7 +64,18 @@ router.get("/liked-by", async (req, res) => {
         if (posts) {
             res.status(200).json(posts)
         } else {
-            res.status(400).json({message: "Error"})
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    }
+})
+
+router.get("/saved-by", async (req, res) => {
+    if (req.query.user_id && req.body.token) {
+        const posts = await getPostsSavedByUser(req.body.token, req.query.user_id)
+        if (posts) {
+            res.status(200).json(posts)
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
         }
     }
 })

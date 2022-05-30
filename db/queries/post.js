@@ -5,6 +5,7 @@ const PostModel = mongoose.model("Post", postSchema)
 const {getUserWithToken, getUserById} = require("./user")
 const {getPostLikeCount, getIdsPostLikedByUser} = require("./post_like")
 const {getPostComments} = require("./post_comment")
+const {getIdsPostSavedByUser} = require("./post_save")
 const {isFollower} = require("./user_follower.js")
 
 async function createPost(data) {
@@ -82,4 +83,22 @@ async function getPostsUserLiked(token, user_id) {
     }
 }
 
-module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked}
+async function getPostsSavedByUser(token, user_id) {
+    const currentUser = await getUserWithToken(token)
+    const user = await getUserById(user_id)
+    if (user && currentUser && user._id.equals(currentUser._id)) {
+        const ids = await getIdsPostSavedByUser(user._id)
+        const pipeline = [
+            {$match: {
+                _id: {
+                    $in: ids
+                }
+            }}
+        ]
+        return PostModel.aggregate(pipeline).exec()
+    } else {
+        return false
+    }
+}
+
+module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked, getPostsSavedByUser}
