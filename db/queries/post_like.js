@@ -16,6 +16,11 @@ async function getIdsPostLikedByUser(user_id){
     return [new ObjectId("6295319a7f93e67582b3592e"), new ObjectId("62952e2c6ba99cdf719ef5f6")]
 }
 
+async function getUserLikeCount(user_id) {
+    // TODO
+    return 0
+}
+
 async function likePost(data) {
     const {getPostById} = require("./post")
     const user = await getUserWithToken(data.token)
@@ -32,4 +37,4 @@ async function likePost(data) {
     }
 }
 
-module.exports = {getPostLikeCount, likePost, getIdsPostLikedByUser}
+module.exports = {getPostLikeCount, likePost, getIdsPostLikedByUser, getUserLikeCount}

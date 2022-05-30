@@ -13,7 +13,20 @@ router.use(( req, res, next ) => {
     next();
 })
 
-const {registerUser, loginWithToken, loginWithCredentials} = require("../db/queries/user")
+const {registerUser, loginWithToken, loginWithCredentials, getUserInformation} = require("../db/queries/user")
+
+router.get("/", async (req, res) => {
+    if (req.query.user_id) {
+        const data = await getUserInformation(req.query.user_id)
+        if (data) {
+            res.status(200).json(data)
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
 
 router.post("/", async (req, res) => {
     const response = await registerUser(req.body)

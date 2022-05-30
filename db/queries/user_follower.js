@@ -7,4 +7,14 @@ async function isFollower(follower, user) {
     return true
 }
 
-module.exports = {isFollower}
+async function getFollowersCount(user_id) {
+    // TODO
+    return 0
+}
+
+async function getFollowedCount(user_id) {
+    // TODO
+    return 0
+}
+
+module.exports = {isFollower, getFollowersCount, getFollowedCount}

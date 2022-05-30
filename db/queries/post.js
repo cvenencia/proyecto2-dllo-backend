@@ -57,9 +57,20 @@ async function getUserPosts(token, user_id) {
         const pipeline = [
             {$match: {user_id: user._id}}
         ]
-        return PostModel.aggregate(pipeline).exec()
+        return await PostModel.aggregate(pipeline).exec()
     } else {
         return false
+    }
+}
+
+async function getUserPostsCount(user_id) {
+    const user = await getUserById(user_id)
+    if (user) {
+        const pipeline = [
+            {$match: {user_id: user._id}},
+            {$count: "count"}
+        ]
+        return (await PostModel.aggregate(pipeline).exec())[0].count
     }
 }
 
@@ -101,4 +112,4 @@ async function getPostsSavedByUser(token, user_id) {
     }
 }
 
-module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked, getPostsSavedByUser}
+module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked, getPostsSavedByUser, getUserPostsCount}

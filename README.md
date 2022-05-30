@@ -27,7 +27,7 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Response: { token }
 
 
-- [ ] Endpoint de informacion de usuario
+- [X] Endpoint de informacion de usuario
   - No debe tener información privada del usuario (contraseña, fecha de cumpleaños)
   - Debe incluir el numero de publicaciones que el usuario ha dado me gusta, calculado on-demand
   - Debe incluir el numero de publicaciones que el usuario ha subido, calculado on-demand
