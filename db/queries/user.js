@@ -60,7 +60,11 @@ async function getUserWithToken(token){
 }
 
 async function getUserById(user_id) {
-    return await UserModel.findById(user_id).exec()
+    try {
+        return await UserModel.findById(user_id).exec()
+    } catch (err) {
+        return null
+    }
 }
 
 async function loginWithCredentials(data) {

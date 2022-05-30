@@ -13,7 +13,7 @@ router.use(( req, res, next ) => {
     next();
 })
 
-const {createPost, getPostInformation, getUserPosts} = require("../db/queries/post")
+const {createPost, getPostInformation, getUserPosts, getPostsUserLiked} = require("../db/queries/post")
 const {likePost} = require("../db/queries/post_like")
 const {commentPost} = require("../db/queries/post_comment")
 const {savePost} = require("../db/queries/post_save")
@@ -49,6 +49,17 @@ router.get("/", async (req, res) => {
         }
     } else {
         res.status(403).json({message: "Missing post ID."})
+    }
+})
+
+router.get("/liked-by", async (req, res) => {
+    if (req.query.user_id && req.body.token) {
+        const posts = await getPostsUserLiked(req.body.token, req.query.user_id)
+        if (posts) {
+            res.status(200).json(posts)
+        } else {
+            res.status(400).json({message: "Error"})
+        }
     }
 })
 

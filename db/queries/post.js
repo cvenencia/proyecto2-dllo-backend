@@ -3,7 +3,7 @@ const postSchema = require("../schemas/post")
 const PostModel = mongoose.model("Post", postSchema)
 
 const {getUserWithToken, getUserById} = require("./user")
-const {getPostLikeCount} = require("./post_like")
+const {getPostLikeCount, getIdsPostLikedByUser} = require("./post_like")
 const {getPostComments} = require("./post_comment")
 const {isFollower} = require("./user_follower.js")
 
@@ -62,4 +62,24 @@ async function getUserPosts(token, user_id) {
     }
 }
 
-module.exports = {createPost, getPostInformation, getPostById, getUserPosts}
+async function getPostsUserLiked(token, user_id) {
+    const currentUser = await getUserWithToken(token)
+    const user = await getUserById(user_id)
+    if (user && currentUser
+        && (user._id.equals(currentUser._id) || user.public_likes)
+        ) {
+        const ids = await getIdsPostLikedByUser(user._id)
+        const pipeline = [
+            {$match: {
+                _id: {
+                    $in: ids
+                }
+            }}
+        ]
+        return PostModel.aggregate(pipeline).exec()
+    } else {
+        return false
+    }
+}
+
+module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked}
