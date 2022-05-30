@@ -13,7 +13,7 @@ router.use(( req, res, next ) => {
     next();
 })
 
-const {createPost, getPostInformation} = require("../db/queries/post")
+const {createPost, getPostInformation, getUserPosts} = require("../db/queries/post")
 const {likePost} = require("../db/queries/post_like")
 const {commentPost} = require("../db/queries/post_comment")
 const {savePost} = require("../db/queries/post_save")
@@ -33,7 +33,14 @@ router.post("/", async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    if (req.body.post_id) {
+    if (req.query.user_id && req.body.token) {
+        const posts = await getUserPosts(req.body.token, req.query.user_id)
+        if (posts) {
+            res.status(200).json(posts)
+        } else {
+            res.status(400).json({message: "Error"})
+        }
+    } else if (req.body.post_id) {
         const post = await getPostInformation(req.body.post_id)
         if (post) {
             res.status(200).json(post)

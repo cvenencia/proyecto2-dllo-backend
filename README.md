@@ -37,7 +37,7 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Ruta: '/users/'
   - Query: { user_id }
   - Response: { username, email, bio, liked_count, posts_count, followers_count, followed_count }
-- [ ] Endpoint de publicaciones que un usuario ha subido
+- [X] Endpoint de publicaciones que un usuario ha subido
   - Solo está permitido si el usuario esta siguiendo al usuario, a menos que sea el usuario mismo
   - Metodo: GET
   - Ruta: '/posts/'

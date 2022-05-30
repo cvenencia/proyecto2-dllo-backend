@@ -59,6 +59,10 @@ async function getUserWithToken(token){
     return await UserModel.findOne({token}).exec()
 }
 
+async function getUserById(user_id) {
+    return await UserModel.findById(user_id).exec()
+}
+
 async function loginWithCredentials(data) {
     const {password, username} = data
     const user = await UserModel.findOne({username}).exec()
@@ -94,4 +98,4 @@ async function userExists(username) {
     return user == null ? false : true
 }
 
-module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken}
+module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken, getUserById}
