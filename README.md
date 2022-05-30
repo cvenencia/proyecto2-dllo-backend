@@ -37,19 +37,19 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Ruta: '/users/'
   - Query: { user_id }
   - Response: { username, email, bio, liked_count, posts_count, followers_count, followed_count }
-- [ ] Endpoint de publicaciones que un usuario ha subido
+- [X] Endpoint de publicaciones que un usuario ha subido
   - Solo está permitido si el usuario esta siguiendo al usuario, a menos que sea el usuario mismo
   - Metodo: GET
   - Ruta: '/posts/'
   - Query: { author }
   - Response: { posts }
-- [ ] Endpoint de publicaciones que un usuario ha dado "me gusta"
+- [X] Endpoint de publicaciones que un usuario ha dado "me gusta"
   - Solo está permitido si el usuario permite ver sus "me gusta", a menos que sea el usuario mismo
   - Metodo: GET
   - Ruta: '/posts/liked-by'
   - Query: { user_id }
   - Response: { posts }
-- [ ] Endpoint de publicaciones que un usuario ha guardado
+- [X] Endpoint de publicaciones que un usuario ha guardado
   - Solo está permitido para el usuario mismo
   - Metodo: GET
   - Ruta: '/posts/saved-by'
@@ -91,12 +91,12 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Response: { posts }
 
 
-- [ ] Endpoint de crear/subir publicacion
+- [X] Endpoint de crear/subir publicacion
   - Metodo: POST
   - Ruta: '/posts/'
   - Body: { img_url, bio, author }
   - Response: {  }
-- [ ] Endpoint de informacion de publicacion
+- [X] Endpoint de informacion de publicacion
   - Debe incluir el numero de likes de la publicacion, calculado on-demand
   - Debe incluir los comentarios de la publicacion, calculado on-demand
   - Metodo: GET
@@ -105,17 +105,17 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Response: { img_url, bio, author, likes, comments }
 
 
-- [ ] Endpoint de dar me gusta a una publicación
+- [X] Endpoint de dar me gusta a una publicación
   - Metodo: POST
   - Ruta: '/posts/like'
   - Body: { post_id }
   - Response: {  }
-- [ ] Endpoint de guardar una publicación
+- [X] Endpoint de guardar una publicación
   - Metodo: POST
   - Ruta: '/posts/save'
   - Body: { post_id }
   - Response: {  }
-- [ ] Endpoint de comentar en una publicación
+- [X] Endpoint de comentar en una publicación
   - Metodo: POST
   - Ruta: '/posts/'
   - Body: { post_id, comment }

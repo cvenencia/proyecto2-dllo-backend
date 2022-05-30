@@ -36,6 +36,10 @@ const userSchema = new Schema({
     },
     token: {
         type: String
+    },
+    public_likes: {
+        type: Boolean,
+        default: true
     }
 })
 

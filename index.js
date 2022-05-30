@@ -8,5 +8,8 @@ require('dotenv').config()
 const users = require("./routes/users")
 app.use("/users", users)
 
+const posts = require("./routes/posts")
+app.use("/posts", posts)
+
 connect()
 app.listen(5000)
