@@ -6,7 +6,7 @@ describe("User login and registration", () => {
     let mongo, server
 
     beforeAll(async () => {
-        mongo = await connectTest()
+        mongo = await connectTest("login-registration")
         await cleanDB(mongo)
         server = app.listen(5001)
     })

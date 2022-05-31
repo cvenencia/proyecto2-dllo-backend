@@ -13,9 +13,9 @@ async function connect(){
     })
 }
 
-async function connectTest(){ 
+async function connectTest(index){ 
     await mongoose.connect(
-        "mongodb://localhost:27017/picshar-test"
+        "mongodb://localhost:27017/picshar-test-" + index
         )
     .then(() => {
         console.log("Connected with mongo")

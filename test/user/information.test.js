@@ -13,7 +13,7 @@ describe("User information", () => {
     let response
 
     beforeAll(async () => {
-        mongo = await connectTest()
+        mongo = await connectTest("information")
         await cleanDB(mongo)
         server = app.listen(5002)
 

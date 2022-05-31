@@ -13,7 +13,7 @@ describe("List of followers and followed", () => {
     let token, responseFollowers, responseFollowed
 
     beforeAll(async () => {
-        mongo = await connectTest()
+        mongo = await connectTest("follow-lists")
         await cleanDB(mongo)
         server = app.listen(5003)
 
