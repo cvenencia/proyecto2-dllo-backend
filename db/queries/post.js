@@ -52,7 +52,7 @@ async function getUserPosts(token, user_id) {
     const currentUser = await getUserWithToken(token)
     const user = await getUserById(user_id)
     if (user && currentUser
-        && (user._id.equals(currentUser._id) || isFollower(currentUser, user))
+        && (user._id.equals(currentUser._id) || await isFollower(currentUser, user))
         ) {
         const pipeline = [
             {$match: {user_id: user._id}}

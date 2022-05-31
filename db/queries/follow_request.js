@@ -13,7 +13,7 @@ async function requestFollow(token, requested_user_id) {
             user_id: user._id,
             requested_user_id: requested_user._id
         })
-        if (!exists && !isFollower(user, requested_user)) {
+        if (!exists && !await isFollower(user, requested_user)) {
             const request = new FollowRequestModel({
                 user_id: user._id,
                 requested_user_id: requested_user._id
@@ -31,7 +31,7 @@ async function requestFollow(token, requested_user_id) {
 async function respondRequest(token, request_id, action){
     const user = await getUserWithToken(token)
     const request = await getRequest({_id: request_id})
-    if (request && user && user._id.equals(request.user_id)) {
+    if (request && user && user._id.equals(request.user_id) && request.active) {
         switch (action) {
             case "accept":
                 request.active = false
@@ -52,8 +52,18 @@ async function respondRequest(token, request_id, action){
     }
 }
 
+async function getUserRequests(token, user_id) {
+    const currentUser = await getUserWithToken(token)
+    const user = await getUserById(user_id)
+    if (currentUser && user && user._id.equals(currentUser._id)) {
+        return await FollowRequestModel.find({user_id})
+    } else {
+        return false
+    }
+}
+
 async function getRequest(data) {
     return await FollowRequestModel.findOne(data)
 }
 
-module.exports = {requestFollow, respondRequest}
+module.exports = {requestFollow, respondRequest, getUserRequests}

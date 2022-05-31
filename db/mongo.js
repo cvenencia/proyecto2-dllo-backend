@@ -18,7 +18,7 @@ async function connectTest(index){
         "mongodb://localhost:27017/picshar-test-" + index
         )
     .then(() => {
-        console.log("Connected with mongo")
+        // console.log("Connected with mongo")
     })
     .catch((e) => {
         console.log(e)

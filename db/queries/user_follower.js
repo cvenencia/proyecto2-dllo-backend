@@ -4,7 +4,7 @@ const UserFollowerModel = mongoose.model("UserFollower", userFollowerSchema)
 
 async function isFollower(follower, user) {
     // TODO
-    return true
+    return false
 }
 
 async function getFollowersCount(user_id) {
@@ -23,7 +23,7 @@ async function getFollowing(token, user_id) {
     const currentUser = await getUserWithToken(token)
     const user = await getUserById(user_id)
     if (user && currentUser
-        && (user._id.equals(currentUser._id) || isFollower(currentUser, user))
+        && (user._id.equals(currentUser._id) || await isFollower(currentUser, user))
         ) {
         const pipeline = [
             {$match: {
@@ -55,7 +55,7 @@ async function getFollowers(token, user_id) {
     const currentUser = await getUserWithToken(token)
     const user = await getUserById(user_id)
     if (user && currentUser
-        && (user._id.equals(currentUser._id) || isFollower(currentUser, user))
+        && (user._id.equals(currentUser._id) || await isFollower(currentUser, user))
         ) {
         const pipeline = [
             {$match: {

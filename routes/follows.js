@@ -14,7 +14,7 @@ router.use(( req, res, next ) => {
 })
 
 const {getFollowing, getFollowers} = require("../db/queries/user_follower")
-const { requestFollow, respondRequest } = require('../db/queries/follow_request')
+const { requestFollow, respondRequest, getUserRequests } = require('../db/queries/follow_request')
 
 router.get("/following", async (req, res) => {
     if (req.query.user_id && req.body.token) {
@@ -47,6 +47,19 @@ router.post("/request", async (req, res) => {
         const valid = await requestFollow(req.body.token, req.body.user_id)
         if (valid) {
             res.status(201).json({})
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
+
+router.get("/request", async (req, res) => {
+    if (req.body.user_id && req.body.token) {
+        const requests = await getUserRequests(req.body.token, req.body.user_id)
+        if (requests) {
+            res.status(200).json(requests)
         } else {
             res.status(400).json({message: "Invalid parameters."})
         }
