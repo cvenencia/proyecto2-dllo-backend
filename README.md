@@ -144,10 +144,10 @@ Desarrollen el backend para un clon de Twitter + Instagram.
 - [X] Lista de seguidores de un usuario
 - [X] Lista de seguidos de un usuario
 - [X] Solicitar seguir
-- [ ] Aceptar solicitud
-  - [ ] Aceptar solicitud previamente aceptada o rechazada
-- [ ] Rechazar solicitud
-  - [ ] Rechazar solicitud previamente aceptada o rechazada
+- [X] Aceptar solicitud
+  - [X] Aceptar solicitud previamente aceptada o rechazada
+- [X] Rechazar solicitud
+  - [X] Rechazar solicitud previamente aceptada o rechazada
 
 
 - [ ] Dar me gusta a publicacion
