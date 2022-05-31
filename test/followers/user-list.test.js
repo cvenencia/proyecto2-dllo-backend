@@ -7,15 +7,15 @@ const {followUser} = require("../../db/queries/user_follower")
 const {getUserById} = require("../../db/queries/user")
 const {random} = require("../util")
 
-describe("User information", () => {
+describe("List of followers and followed", () => {
     let mongo, server
-    let token, postCount, likeCount, followersCount, followedCount
-    let response
+    let followersIds = [], followedIds = []
+    let token, responseFollowers, responseFollowed
 
     beforeAll(async () => {
         mongo = await connectTest()
         await cleanDB(mongo)
-        server = app.listen(5002)
+        server = app.listen(5003)
 
         // Register user
         const user = {
@@ -27,32 +27,10 @@ describe("User information", () => {
         }
         const {body: {token: t}} = await request(app).post('/users').send(user)
         token = t
-
-        // Create random amount of posts
-        postCount = random(1, 20)
-        for (let i = 0; i < postCount; i++) {
-            await request(app).post("/posts").send({
-                token,
-                img_url: "https://test.com",
-                bio: "test"
-            })
-        }
-
-        // Like random amount of posts
         const {user_id} = jwt.verify(token, process.env.TOKEN_KEY)
-        const {body: posts} = await request(app).get("/posts?user_id=" + user_id).send({
-            token
-        })
-        likeCount = random(1, 20)
-        for (let i = 0; i < likeCount; i++) {
-            await request(app).post("/posts/like").send({
-                token,
-                post_id: posts[random(0, postCount - 1)]._id
-            })
-        }
 
         // Follow random amount of users
-        followedCount = random(1, 20)
+        const followedCount = random(1, 20)
         for (let i = 0; i < followedCount; i++) {
             const user = {
                 username: "username" + i,
@@ -67,10 +45,11 @@ describe("User information", () => {
             const follower = await getUserById(user_id)
             const followed = await getUserById(u)
             await followUser(follower, followed)
+            followedIds.push(followed._id)
         }
 
         // Be followed by random amount of users
-        followersCount = random(1, 20)
+        const followersCount = random(1, 20)
         for (let i = 0; i < followersCount; i++) {
             const user = {
                 username: "username" + (i + followedCount),
@@ -85,10 +64,21 @@ describe("User information", () => {
             const followed = await getUserById(user_id)
             const follower = await getUserById(u)
             await followUser(follower, followed)
+            followersIds.push(follower._id)
         }
 
-       const {body: r} = await request(app).get("/users?user_id=" + user_id)
-       response = r
+        const {body: b1} = await request(app).get("/follows/following?user_id=" + user_id).send({
+            token
+        })
+        responseFollowed = b1.toString()
+
+        const {body: b2} = await request(app).get("/follows/followers?user_id=" + user_id).send({
+            token
+        })
+        responseFollowers = b2.toString()
+
+        followersIds = followersIds.toString()
+        followedIds = followedIds.toString()
     })
 
     afterAll(async () => {
@@ -96,26 +86,11 @@ describe("User information", () => {
         await server.close()
     })
 
-    test("Password and birthdate not included in response", async () => {
-        expect(response.password).not.toBeTruthy()
-        expect(response.hashed_password).not.toBeTruthy()
-        expect(response.birthdate).not.toBeTruthy()
+    test("Correct followers list", async () => {
+        expect(responseFollowers).toBe(followersIds)
     })
 
-    test("Correct post count", async () => {
-        expect(response.posts_count).toBe(postCount)
+    test("Correct followed list", async () => {
+        expect(responseFollowed).toBe(followedIds)
     })
-
-    test("Correct like posts count", async () => {
-        expect(response.liked_count).toBe(likeCount)
-    })
-
-    test("Correct followed count", async () => {
-        expect(response.followed_count).toBe(followedCount)
-    })
-
-    test("Correct followers count", async () => {
-        expect(response.followers_count).toBe(followersCount)
-    })
-
 })
