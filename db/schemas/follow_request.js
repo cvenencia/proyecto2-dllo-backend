@@ -12,6 +12,10 @@ const followRequestSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",
         required: [true, "Requested user required."]
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 })
 

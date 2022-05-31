@@ -14,6 +14,7 @@ router.use(( req, res, next ) => {
 })
 
 const {getFollowing, getFollowers} = require("../db/queries/user_follower")
+const { requestFollow, respondRequest } = require('../db/queries/follow_request')
 
 router.get("/following", async (req, res) => {
     if (req.query.user_id && req.body.token) {
@@ -33,6 +34,32 @@ router.get("/followers", async (req, res) => {
         const followerUsers = await getFollowers(req.body.token, req.query.user_id)
         if (followerUsers) {
             res.status(200).json(followerUsers)
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
+
+router.post("/request", async (req, res) => {
+    if (req.body.user_id && req.body.token) {
+        const valid = await requestFollow(req.body.token, req.body.user_id)
+        if (valid) {
+            res.status(201).json({})
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
+    }
+})
+
+router.post("/response", async (req, res) => {
+    if (req.body.token && req.body.request_id && req.body.action) {
+        const valid = await respondRequest(req.body.token, req.body.request_id, req.body.action)
+        if (valid) {
+            res.status(201).json({})
         } else {
             res.status(400).json({message: "Invalid parameters."})
         }

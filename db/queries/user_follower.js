@@ -74,4 +74,12 @@ async function getFollowers(token, user_id) {
     }
 }
 
-module.exports = {isFollower, getFollowersCount, getFollowedCount, getFollowers, getFollowing}
+async function followUser(follower, followed) {
+    const follow = new UserFollowerModel({
+        follower_id: follower._id,
+        followed_id: followed._id
+    })
+    await follow.save().catch(err => err)
+}
+
+module.exports = {isFollower, getFollowersCount, getFollowedCount, getFollowers, getFollowing, followUser}
