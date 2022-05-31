@@ -67,6 +67,19 @@ async function getUserById(user_id) {
     }
 }
 
+async function getUsersByIds(ids) {
+    try {
+        const pipeline = [
+            {$match: {
+                _id: {$in: ids}
+            }}
+        ]
+        return await UserModel.aggregate(pipeline).exec()
+    } catch (err) {
+        return null
+    }
+}
+
 async function loginWithCredentials(data) {
     const {password, username} = data
     const user = await UserModel.findOne({username}).exec()
@@ -127,4 +140,4 @@ async function getUserInformation(user_id) {
     }
 }
 
-module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken, getUserById, getUserInformation}
+module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken, getUserById, getUserInformation, getUsersByIds}
