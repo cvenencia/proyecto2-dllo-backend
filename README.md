@@ -83,7 +83,7 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - El campo 'action' corresponde a la string 'accept' o 'reject'.
 
 
-- [ ] Get timeline de un usuario
+- [X] Get timeline de un usuario
   - Debe ser paginada
   - Metodo: GET
   - Ruta: '/posts/timeline'
