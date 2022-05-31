@@ -74,6 +74,29 @@ async function getFollowers(token, user_id) {
     }
 }
 
+async function getFollowed(token, user_id) {
+    const {getUserWithToken, getUserById, getUsersByIds} = require("./user")
+
+    const currentUser = await getUserWithToken(token)
+    const user = await getUserById(user_id)
+    if (user && currentUser && user._id.equals(currentUser._id)) {
+        const pipeline = [
+            {$match: {
+                follower_id: user._id
+            }}
+        ]
+        const follows = await UserFollowerModel.aggregate(pipeline).exec()
+
+        // Send only the IDs of the users
+        return follows.map(f => f.followed_id)
+
+        // Send all the user objects (?)
+        // return await getUsersByIds(follows.map(f => f.followed_id))
+    } else {
+        return false
+    }
+}
+
 async function followUser(follower, followed) {
     const follow = new UserFollowerModel({
         follower_id: follower._id,
@@ -82,4 +105,4 @@ async function followUser(follower, followed) {
     await follow.save().catch(err => err)
 }
 
-module.exports = {isFollower, getFollowersCount, getFollowedCount, getFollowers, getFollowing, followUser}
+module.exports = {isFollower, getFollowersCount, getFollowedCount, getFollowers, getFollowed, getFollowing, followUser}
