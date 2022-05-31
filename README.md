@@ -133,12 +133,12 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - [X] Informacion incompleta
 
 
-- [ ] Informacion de Usuario
-  - [ ] Contraseña y fecha de cumpleaños no incluida en el response
-  - [ ] Numero de publicaciones del usuario refleja el numero correcto
-  - [ ] Numero de publicaciones que le gustan al usuario refleja el numero correcto
-  - [ ] Numero de seguidores refleja el numero correcto
-  - [ ] Numero de seguidos refleja el numero correcto
+- [X] Informacion de Usuario
+  - [X] Contraseña y fecha de cumpleaños no incluida en el response
+  - [X] Numero de publicaciones del usuario refleja el numero correcto
+  - [X] Numero de publicaciones que le gustan al usuario refleja el numero correcto
+  - [X] Numero de seguidores refleja el numero correcto
+  - [X] Numero de seguidos refleja el numero correcto
 
 
 - [ ] Lista de seguidores de un usuario
