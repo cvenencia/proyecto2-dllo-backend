@@ -1,14 +1,14 @@
-const app = require("./index-test")
-const {connectTest, cleanDB} = require("../db/mongo")
+const app = require("../index-test")
+const {connectTest, cleanDB} = require("../../db/mongo")
 const request = require("supertest")
 
 describe("User login and registration", () => {
     let mongo, server
 
     beforeAll(async () => {
-        mongo = await connectTest()
+        mongo = await connectTest("login-registration")
         await cleanDB(mongo)
-        server = app.listen(5000)
+        server = app.listen(5001)
     })
 
     afterAll(async () => {

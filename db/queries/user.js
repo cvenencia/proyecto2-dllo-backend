@@ -67,6 +67,19 @@ async function getUserById(user_id) {
     }
 }
 
+async function getUsersByIds(ids) {
+    try {
+        const pipeline = [
+            {$match: {
+                _id: {$in: ids}
+            }}
+        ]
+        return await UserModel.aggregate(pipeline).exec()
+    } catch (err) {
+        return null
+    }
+}
+
 async function loginWithCredentials(data) {
     const {password, username} = data
     const user = await UserModel.findOne({username}).exec()
@@ -102,4 +115,29 @@ async function userExists(username) {
     return user == null ? false : true
 }
 
-module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken, getUserById}
+async function getUserInformation(user_id) {
+    const {getUserPostsCount} = require("./post")
+    const {getUserLikeCount} = require("./post_like")
+    const {getFollowedCount, getFollowersCount} = require("./user_follower")
+
+    const user = await getUserById(user_id)
+    if (user) {
+        const liked_count = await getUserLikeCount(user._id)
+        const posts_count = await getUserPostsCount(user._id)
+        const followers_count = await getFollowersCount(user._id)
+        const followed_count = await getFollowedCount(user._id)
+        return {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            liked_count,
+            posts_count,
+            followers_count,
+            followed_count
+        }
+    } else {
+        return null
+    }
+}
+
+module.exports = {registerUser, loginWithToken, loginWithCredentials, getUserWithToken, getUserById, getUserInformation, getUsersByIds}

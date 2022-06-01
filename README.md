@@ -27,7 +27,7 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Response: { token }
 
 
-- [ ] Endpoint de informacion de usuario
+- [X] Endpoint de informacion de usuario
   - No debe tener información privada del usuario (contraseña, fecha de cumpleaños)
   - Debe incluir el numero de publicaciones que el usuario ha dado me gusta, calculado on-demand
   - Debe incluir el numero de publicaciones que el usuario ha subido, calculado on-demand
@@ -55,26 +55,26 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - Ruta: '/posts/saved-by'
   - Query: { user_id }
   - Response: { posts }
-- [ ] Endpoint de usuarios seguidos por un usuario
+- [X] Endpoint de usuarios seguidos por un usuario
   - Solo está permitido si el usuario esta siguiendo al usuario, a menos que sea el usuario mismo
   - Metodo: GET
   - Ruta: '/follows/following'
   - Query: { user_id }
   - Response: { users }
-- [ ] Endpoint de seguidores de un usuario
+- [X] Endpoint de seguidores de un usuario
   - Solo está permitido si el usuario esta siguiendo al usuario, a menos que sea el usuario mismo
   - Metodo: GET
   - Ruta: '/follows/followers'
   - Query: { user_id }
   - Response: { users }
 
-- [ ] Endpoint de solicitar seguir a un usuario
+- [X] Endpoint de solicitar seguir a un usuario
   - Solo permitido si el usuario ya no está siguiendo al usuario
   - Metodo: POST
   - Ruta: '/follows/request'
   - Body: { user_id }
   - Response: {}
-- [ ] Endpoint de aceptar o rechazar solicitud de seguir
+- [X] Endpoint de aceptar o rechazar solicitud de seguir
   - Solo está permitido si el usuario es el que recibe la solicitud
   - Metodo: POST
   - Ruta: '/follows/response'
@@ -83,7 +83,7 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - El campo 'action' corresponde a la string 'accept' o 'reject'.
 
 
-- [ ] Get timeline de un usuario
+- [X] Get timeline de un usuario
   - Debe ser paginada
   - Metodo: GET
   - Ruta: '/posts/timeline'
@@ -133,26 +133,26 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - [X] Informacion incompleta
 
 
-- [ ] Informacion de Usuario
-  - [ ] Contraseña y fecha de cumpleaños no incluida en el response
-  - [ ] Numero de publicaciones del usuario refleja el numero correcto
-  - [ ] Numero de publicaciones que le gustan al usuario refleja el numero correcto
-  - [ ] Numero de seguidores refleja el numero correcto
-  - [ ] Numero de seguidos refleja el numero correcto
+- [X] Informacion de Usuario
+  - [X] Contraseña y fecha de cumpleaños no incluida en el response
+  - [X] Numero de publicaciones del usuario refleja el numero correcto
+  - [X] Numero de publicaciones que le gustan al usuario refleja el numero correcto
+  - [X] Numero de seguidores refleja el numero correcto
+  - [X] Numero de seguidos refleja el numero correcto
 
 
-- [ ] Lista de seguidores de un usuario
-- [ ] Lista de seguidos de un usuario
-- [ ] Solicitar seguir
-- [ ] Aceptar solicitud
-  - [ ] Aceptar solicitud previamente aceptada o rechazada
-- [ ] Rechazar solicitud
-  - [ ] Rechazar solicitud previamente aceptada o rechazada
+- [X] Lista de seguidores de un usuario
+- [X] Lista de seguidos de un usuario
+- [X] Solicitar seguir
+- [X] Aceptar solicitud
+  - [X] Aceptar solicitud previamente aceptada o rechazada
+- [X] Rechazar solicitud
+  - [X] Rechazar solicitud previamente aceptada o rechazada
 
 
-- [ ] Dar me gusta a publicacion
-- [ ] Publicaciones "gustadas" por un usuario
-- [ ] Guardar publicacion
-- [ ] Publicaciones guardadas por un usuario
-- [ ] Comentar publicacion
-- [ ] Comentarios de una publicacion
+- [X] Dar me gusta a publicacion
+- [X] Publicaciones "gustadas" por un usuario
+- [X] Guardar publicacion
+- [X] Publicaciones guardadas por un usuario
+- [X] Comentar publicacion
+- [X] Comentarios de una publicacion

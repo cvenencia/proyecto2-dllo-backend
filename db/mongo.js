@@ -13,12 +13,12 @@ async function connect(){
     })
 }
 
-async function connectTest(){ 
+async function connectTest(index){ 
     await mongoose.connect(
-        "mongodb://localhost:27017/picshar-test"
+        "mongodb://localhost:27017/picshar-test-" + index
         )
     .then(() => {
-        console.log("Connected with mongo")
+        // console.log("Connected with mongo")
     })
     .catch((e) => {
         console.log(e)
@@ -28,8 +28,26 @@ async function connectTest(){
 }
 
 async function cleanDB(mongo){
-    const userSchema = require("../db/schemas/user")
+    const userSchema = require("./schemas/user")
     await mongo.model('User', userSchema).deleteMany({})
+
+    const userFollowerSchema = require("./schemas/user_follower")
+    await mongo.model('UserFollower', userFollowerSchema).deleteMany({})
+
+    const postSchema = require("./schemas/post")
+    await mongo.model('Post', postSchema).deleteMany({})
+
+    const postSaveSchema = require("./schemas/post_save")
+    await mongo.model('PostSave', postSaveSchema).deleteMany({})
+
+    const postLikeSchema = require("./schemas/post_like")
+    await mongo.model('PostLike', postLikeSchema).deleteMany({})
+
+    const postCommentSchema = require("./schemas/post_comment")
+    await mongo.model('PostComment', postCommentSchema).deleteMany({})
+
+    const followRequestSchema = require("./schemas/follow_request")
+    await mongo.model('FollowRequest', followRequestSchema).deleteMany({})
 }
 
 module.exports = {connect, connectTest, cleanDB}

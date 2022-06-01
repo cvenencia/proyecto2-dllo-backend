@@ -18,7 +18,8 @@ const {
     getPostInformation,
     getUserPosts,
     getPostsUserLiked,
-    getPostsSavedByUser
+    getPostsSavedByUser,
+    getUserTimeline
 } = require("../db/queries/post")
 const {likePost} = require("../db/queries/post_like")
 const {commentPost} = require("../db/queries/post_comment")
@@ -55,6 +56,20 @@ router.get("/", async (req, res) => {
         }
     } else {
         res.status(403).json({message: "Missing post ID."})
+    }
+})
+
+router.get("/timeline", async (req, res) => {
+    const {token, user_id, page, limit} = req.body
+    if (token && user_id && page && limit) {
+        const posts = await getUserTimeline(token, user_id, page, limit)
+        if (posts) {
+            res.status(200).json(posts)
+        } else {
+            res.status(400).json({message: "Invalid parameters."})
+        }
+    } else {
+        res.status(403).json({message: "Missing parameters."})
     }
 })
 

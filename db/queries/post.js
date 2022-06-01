@@ -6,7 +6,7 @@ const {getUserWithToken, getUserById} = require("./user")
 const {getPostLikeCount, getIdsPostLikedByUser} = require("./post_like")
 const {getPostComments} = require("./post_comment")
 const {getIdsPostSavedByUser} = require("./post_save")
-const {isFollower} = require("./user_follower.js")
+const {isFollower, getFollowed} = require("./user_follower.js")
 
 async function createPost(data) {
     const {token, ...newData} = data
@@ -52,14 +52,45 @@ async function getUserPosts(token, user_id) {
     const currentUser = await getUserWithToken(token)
     const user = await getUserById(user_id)
     if (user && currentUser
-        && (user._id.equals(currentUser._id) || isFollower(currentUser, user))
+        && (user._id.equals(currentUser._id) || await isFollower(currentUser, user))
         ) {
         const pipeline = [
             {$match: {user_id: user._id}}
         ]
-        return PostModel.aggregate(pipeline).exec()
+        return await PostModel.aggregate(pipeline).exec()
     } else {
         return false
+    }
+}
+
+async function getUserTimeline(token, user_id, page, limit) {
+    // getFollowed() already checks for token and user_id to correspond to the same user
+    const ids = await getFollowed(token, user_id)
+    try {
+        if (ids) {
+            const pipeline = [
+                {match: {user_id: {$in: ids}}},
+                {$skip: page * limit},
+                {$limit: limit}
+            ]
+            const posts = await PostModel.aggregate(pipeline).exec()
+            return posts
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+async function getUserPostsCount(user_id) {
+    const user = await getUserById(user_id)
+    if (user) {
+        const pipeline = [
+            {$match: {user_id: user._id}},
+            {$count: "count"}
+        ]
+        return (await PostModel.aggregate(pipeline).exec())[0].count
     }
 }
 
@@ -101,4 +132,4 @@ async function getPostsSavedByUser(token, user_id) {
     }
 }
 
-module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked, getPostsSavedByUser}
+module.exports = {createPost, getPostInformation, getPostById, getUserPosts, getPostsUserLiked, getPostsSavedByUser, getUserPostsCount, getUserTimeline}
