@@ -150,9 +150,9 @@ Desarrollen el backend para un clon de Twitter + Instagram.
   - [X] Rechazar solicitud previamente aceptada o rechazada
 
 
-- [ ] Dar me gusta a publicacion
-- [ ] Publicaciones "gustadas" por un usuario
-- [ ] Guardar publicacion
-- [ ] Publicaciones guardadas por un usuario
-- [ ] Comentar publicacion
-- [ ] Comentarios de una publicacion
+- [X] Dar me gusta a publicacion
+- [X] Publicaciones "gustadas" por un usuario
+- [X] Guardar publicacion
+- [X] Publicaciones guardadas por un usuario
+- [X] Comentar publicacion
+- [X] Comentarios de una publicacion
