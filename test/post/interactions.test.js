@@ -8,7 +8,7 @@ const {random} = require("../util")
 describe("Post interactions", () => {
     let mongo, server
     let token, user_id
-    let posts, postCount
+    let post, postCount
 
     beforeAll(async () => {
         mongo = await connectTest("post-interactions")
@@ -17,7 +17,7 @@ describe("Post interactions", () => {
 
         // Register user
         const user = {
-            username: "username1234",
+            username: "username12345",
             password: "password1234",
             birthdate: "1950-04-30",
             email: "test@test.com",
@@ -28,20 +28,17 @@ describe("Post interactions", () => {
         const {user_id: u} = jwt.verify(token, process.env.TOKEN_KEY)
         user_id = u
         
-        // Create random amount of posts
-        postCount = random(1, 20)
-        for (let i = 0; i < postCount; i++) {
-            await request(app).post("/posts").send({
-                token,
-                img_url: "https://test.com",
-                bio: "test"
-            })
-        }
+        // Create a post
+        await request(app).post("/posts").send({
+            token,
+            img_url: "https://test.com",
+            bio: "test"
+        })
 
         const {body} = await request(app).get("/posts?user_id=" + user_id).send({
             token
         })
-        posts = body
+        post = body[0]
     })
 
     afterAll(async () => {
@@ -52,62 +49,61 @@ describe("Post interactions", () => {
     test("Likes", async () => {
         const expectedLikedPosts = []
         
-        // Like random amount of posts
-        const likeCount = random(1, 20)
-        for (let i = 0; i < likeCount; i++) {
-            const index = random(0, postCount - 1)
-            const {status} = await request(app).post("/posts/like").send({
-                token,
-                post_id: posts[index]._id
-            })
-            expectedLikedPosts.push(posts[index]._id)
-            expect(status).toBe(201)
-        }
+        // Like post
+        const {status: s1} = await request(app).post("/posts/like").send({
+            token,
+            post_id: post._id
+        })
+        expectedLikedPosts.push(post._id)
+        expect(s1).toBe(201)
 
-        let {body: likedPosts} = await request(app).get("/posts/liked-by?user_id=" + user_id).send({token})
+        // Correct like count on post information
+        const {status: s2, body} = await request(app).get("/posts").send({
+            post_id: post._id
+        })
+        expect(s2).toBe(200)
+        expect(body.likes).toBe(1)
+
+        // Correct posts liked by user
+        let {status: s3, body: likedPosts} = await request(app).get("/posts/liked-by?user_id=" + user_id).send({token})
         likedPosts = likedPosts.map(p => p._id)
-        expect(expectedLikedPosts).toBe(likedPosts)
+        expect(expectedLikedPosts.toString()).toBe(likedPosts.toString())
     })
 
     test("Saves", async () => {
         const expectedSavedPosts = []
         
-        // Save random amount of posts
-        const saveCount = random(1, 20)
-        for (let i = 0; i < saveCount; i++) {
-            const index = random(0, postCount - 1)
-            const {status} = await request(app).post("/posts/save").send({
-                token,
-                post_id: posts[index]._id
-            })
-            expectedSavedPosts.push(posts[index]._id)
-            expect(status).toBe(201)
-        }
+        // Save post
+        const {status} = await request(app).post("/posts/save").send({
+            token,
+            post_id: post._id
+        })
+        expectedSavedPosts.push(post._id)
+        expect(status).toBe(201)
 
         let {body: savedPosts} = await request(app).get("/posts/saved-by?user_id=" + user_id).send({token})
         savedPosts = savedPosts.map(p => p._id)
-        expect(expectedSavedPosts).toBe(savedPosts)
+        expect(expectedSavedPosts.toString()).toBe(savedPosts.toString())
     })
 
     test("Comments", async () => {
         const expectedComments = []
         
-        // Comment random amount of posts
+        // Comment post
         const commentCount = random(1, 20)
         for (let i = 0; i < commentCount; i++) {
-            const index = random(0, postCount - 1)
             const comment = "xd " + i
             const {status} = await request(app).post("/posts/comment").send({
                 token,
-                post_id: posts[index]._id,
+                post_id: post._id,
                 comment: comment
             })
             expectedComments.push(comment)
             expect(status).toBe(201)
         }
 
-        let {body: comments} = await request(app).get("/posts/saved-by?user_id=" + user_id).send({token})
-        comments = comments.map(p => p.comment)
-        expect(expectedComments).toBe(comments)
+        let {body: receivedPost} = await request(app).get("/posts").send({post_id: post._id})
+        receivedPost = receivedPost.comments.map(c => c.comment)
+        expect(expectedComments.toString()).toBe(receivedPost.toString())
     })
 })
