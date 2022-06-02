@@ -1,10 +1,6 @@
 # Picshar
 
-Desarrollen el backend para un clon de Twitter + Instagram.
-
-- La API debe satisfacer cada endpoint que está utilizando el frontend, de manera que el frontend funcione completamente. 
-- La API debe crearse como repositorio en Github y debe ser "entregada" al profesor utilizando el enlace, donde se enviará unicamente el link al repositorio. 
-- El proyecto se desarrolla en grupos de 3 personas, con fecha de entrega 29 de Mayo 23:59.
+- ### Archivo .env requerido. Ver el archivo de ejemplo.
 
 ## Endpoints
 
