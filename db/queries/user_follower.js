@@ -1,20 +1,25 @@
 const mongoose = require("mongoose")
 const userFollowerSchema = require("../schemas/user_follower")
 const UserFollowerModel = mongoose.model("UserFollower", userFollowerSchema)
+const {ObjectId} = require("mongodb")
 
 async function isFollower(follower, user) {
-    // TODO
-    return false
+    return await UserFollowerModel.findOne({
+        follower_id: follower._id,
+        followed_id: user._id
+    }).exec() ? true : false
 }
 
 async function getFollowersCount(user_id) {
-    // TODO
-    return 0
+    return (await UserFollowerModel.find({
+        followed_id: new ObjectId(user_id)
+    }).exec()).length
 }
 
 async function getFollowedCount(user_id) {
-    // TODO
-    return 0
+    return (await UserFollowerModel.find({
+        follower_id: new ObjectId(user_id)
+    }).exec()).length
 }
 
 async function getFollowing(token, user_id) {
@@ -40,13 +45,6 @@ async function getFollowing(token, user_id) {
     } else {
         return false
     }
-    // const { ObjectId } = require('mongodb')
-    // const x = new UserFollowerModel({
-    //     follower_id: new ObjectId("62952e1d6ba99cdf719ef5f1"),
-    //     followed_id: new ObjectId("628f131736e809c16696d078")
-    // })
-    // await x.save()
-    // return x
 }
 
 async function getFollowers(token, user_id) {

@@ -5,20 +5,25 @@ const PostLikeModel = mongoose.model("PostLike", postLikeSchema)
 const {getUserWithToken} = require("./user")
 
 async function getPostLikeCount(post_id){
-    // TODO
-    return 0
+    const pipeline = [
+        {$match: {post_id}},
+        {$count: "count"}
+    ]
+    return (await PostLikeModel.aggregate(pipeline).exec()).length
 }
 
 async function getIdsPostLikedByUser(user_id){
-    // TODO
-    // Must return a list of ObjectIds
-    const { ObjectId } = require('mongodb')
-    return [new ObjectId("6295319a7f93e67582b3592e"), new ObjectId("62952e2c6ba99cdf719ef5f6")]
+    const pipeline = [
+        {$match: {user_id}}
+    ]
+    return (await PostLikeModel.aggregate(pipeline).exec()).map(p => p.post_id)
 }
 
 async function getUserLikeCount(user_id) {
-    // TODO
-    return 0
+    const pipeline = [
+        {$match: {user_id}}
+    ]
+    return (await PostLikeModel.aggregate(pipeline).exec()).length
 }
 
 async function likePost(data) {

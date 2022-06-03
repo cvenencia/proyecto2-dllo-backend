@@ -87,10 +87,9 @@ async function getUserPostsCount(user_id) {
     const user = await getUserById(user_id)
     if (user) {
         const pipeline = [
-            {$match: {user_id: user._id}},
-            {$count: "count"}
+            {$match: {user_id: user._id}}
         ]
-        return (await PostModel.aggregate(pipeline).exec())[0].count
+        return (await PostModel.aggregate(pipeline).exec()).length
     }
 }
 

@@ -21,10 +21,10 @@ async function savePost(data){
 }
 
 async function getIdsPostSavedByUser(user_id) {
-    // TODO
-    // Must return a list of ObjectIds
-    const { ObjectId } = require('mongodb')
-    return [new ObjectId("6295319a7f93e67582b3592e"), new ObjectId("62952e2c6ba99cdf719ef5f6")]
+    const pipeline = [
+        {$match: {user_id}}
+    ]
+    return (await PostSaveModel.aggregate(pipeline).exec()).map(p => p.post_id)
 }
 
 module.exports = {savePost, getIdsPostSavedByUser}

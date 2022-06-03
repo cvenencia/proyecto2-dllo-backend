@@ -5,8 +5,7 @@ const PostCommentModel = mongoose.model("PostComment", postCommentSchema)
 const {getUserWithToken} = require("./user")
 
 async function getPostComments(post_id){
-    // TODO
-    return []
+    return await PostCommentModel.find({post_id}).exec()
 }
 
 async function commentPost(data) {
